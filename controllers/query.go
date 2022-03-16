@@ -12,11 +12,6 @@ func QueryCreate(orderInput models.Order) models.Order {
 
 	newOrder := orderInput
 
-	// err := json.Unmarshal([]byte(jsonInput), &newOrder)
-	// if err != nil {
-	// 	panic(err)
-	// }
-
 	dberr := db.Debug().Create(&newOrder).Error
 
 	if dberr != nil {
@@ -41,21 +36,19 @@ func QueryGetAll() []models.Order {
 	return orders
 }
 
-func testDelete(id uint) {
+func QueryDeleteByID(id uint) {
 	db := database.GetDB()
 
 	dberr := db.Where("Order_id=?", id).Delete(&models.Item{}).Error
 
 	if dberr != nil {
-		fmt.Println("Error fetching user data: ", dberr)
-		return
+		panic(dberr)
 	}
 
 	dberr = db.Delete(&models.Order{}, id).Error
 
 	if dberr != nil {
-		fmt.Println("Error fetching user data: ", dberr)
-		return
+		panic(dberr)
 	}
 
 	fmt.Println("Data Deleted")
