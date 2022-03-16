@@ -9,7 +9,8 @@ import (
 
 func main() {
 	database.StartDB()
-	testCreate()
+	// testCreate()
+	testGet()
 }
 
 func testCreate() {
@@ -46,6 +47,26 @@ func testCreate() {
 		fmt.Println("Error creating user data: ", dberr)
 		return
 	}
+	var converted []byte
 
-	fmt.Println("New User Data:", newOrder)
+	converted, _ = json.Marshal(newOrder)
+
+	fmt.Println("New User Data:", string(converted))
+}
+
+func testGet() {
+	db := database.GetDB()
+
+	var orders []models.Order
+
+	dberr := db.Preload("Items").Find(&orders).Error
+
+	if dberr != nil {
+		fmt.Println("Error fetching user data: ", dberr)
+		return
+	}
+
+	converted, _ := json.Marshal(orders)
+
+	fmt.Println(string(converted))
 }
