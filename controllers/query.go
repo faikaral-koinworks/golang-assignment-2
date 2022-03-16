@@ -3,7 +3,6 @@ package controllers
 import (
 	"assignment-2/database"
 	"assignment-2/models"
-	"encoding/json"
 	"fmt"
 )
 
@@ -54,38 +53,14 @@ func QueryDeleteByID(id uint) {
 	fmt.Println("Data Deleted")
 }
 
-func testUpdate(id uint) {
+func QueryUpdateByID(orderInput models.Order, id uint) models.Order {
 	db := database.GetDB()
-	mockOrder := `
-	{
-		"orderedAt":"2022-11-09T21:21:46+00:00",
-		"customerName":"Test Updated",
-		"items":[
-			{
-				"lineItemID":1,
-				"itemCode":"112312323",
-				"description":"Updatedtest2",
-				"quantity":1
-			},
-			{
-				"lineItemID":2,
-				"itemCode":"121231233",
-				"description":"Updatedtest2",
-				"quantity":1
-			}
-		]
-	}
-	`
 
-	var updatedOrder models.Order
-
-	err := json.Unmarshal([]byte(mockOrder), &updatedOrder)
-	if err != nil {
-		panic(err)
-	}
+	updatedOrder := orderInput
+	var err error
 
 	for i := range updatedOrder.Items {
-		err = db.Model(&updatedOrder.Items[i]).Where("Item_id=?", updatedOrder.Items[i].Item_id).Updates(updatedOrder.Items[i]).Error
+		err = db.Model(&updatedOrder.Items[i]).Where("Item_id=?", updatedOrder.Items[i].Item_id).Updates(&updatedOrder.Items[i]).Error
 		if err != nil {
 			panic(err)
 		}
@@ -95,11 +70,17 @@ func testUpdate(id uint) {
 	updatedOnlyOrder.Customer_name = updatedOrder.Customer_name
 	updatedOnlyOrder.Ordered_at = updatedOrder.Ordered_at
 
-	dberr := db.Model(&updatedOnlyOrder).Where("Order_id=?", id).Updates(updatedOnlyOrder).Error
+	err = db.Model(&updatedOnlyOrder).Where("Order_id=?", id).Updates(&updatedOnlyOrder).Error
 
-	if dberr != nil {
+	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(updatedOrder)
+	err = db.Preload("Items").Where("Order_id=?", id).Find(&updatedOrder).Error
+
+	if err != nil {
+		panic(err)
+	}
+
+	return updatedOrder
 }
