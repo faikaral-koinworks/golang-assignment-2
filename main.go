@@ -9,10 +9,11 @@ import (
 
 func main() {
 	database.StartDB()
-	testCreate()
-	testCreate()
-	testDelete(1)
-	testGet()
+	// testCreate()
+	testUpdate(1)
+	// testCreate()
+	// testDelete(1)
+	// testGet()
 }
 
 func testCreate() {
@@ -91,4 +92,54 @@ func testDelete(id uint) {
 	}
 
 	fmt.Println("Data Deleted")
+}
+
+func testUpdate(id uint) {
+	db := database.GetDB()
+	mockOrder := `
+	{
+		"orderedAt":"2022-11-09T21:21:46+00:00",
+		"customerName":"Test Updated",
+		"items":[
+			{
+				"lineItemID":1,
+				"itemCode":"112312323",
+				"description":"Updatedtest2",
+				"quantity":1
+			},
+			{
+				"lineItemID":2,
+				"itemCode":"121231233",
+				"description":"Updatedtest2",
+				"quantity":1
+			}
+		]
+	}
+	`
+
+	var updatedOrder models.Order
+
+	err := json.Unmarshal([]byte(mockOrder), &updatedOrder)
+	if err != nil {
+		panic(err)
+	}
+
+	for i := range updatedOrder.Items {
+		err = db.Model(&updatedOrder.Items[i]).Where("Item_id=?", updatedOrder.Items[i].Item_id).Updates(updatedOrder.Items[i]).Error
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	var updatedOnlyOrder models.Order
+	updatedOnlyOrder.Customer_name = updatedOrder.Customer_name
+	updatedOnlyOrder.Ordered_at = updatedOrder.Ordered_at
+
+	dberr := db.Model(&updatedOnlyOrder).Where("Order_id=?", id).Updates(updatedOnlyOrder).Error
+
+	if dberr != nil {
+		panic(err)
+	}
+
+	fmt.Println(updatedOrder)
 }
