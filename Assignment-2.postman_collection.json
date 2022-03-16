@@ -1,0 +1,127 @@
+{
+	"info": {
+		"_postman_id": "d62139be-8db4-4226-be58-333a02dd30ef",
+		"name": "Assignment-2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CREATE ORDER",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderedAt\":\"2019-11-09T21:21:46+00:00\",\n    \"customerName\":\"Testing\",\n    \"items\":[\n        {\n            \"itemCode\":\"123\",\n            \"description\":\"Iphon\",\n            \"quantity\":1\n        },\n        {\n            \"itemCode\":\"123\",\n            \"description\":\"Iphon\",\n            \"quantity\":1\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET ALL ORDERS",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE ORDER BY ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE ORDER BY ID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\t{\n\t\t\"orderedAt\":\"2022-11-09T21:21:46+00:00\",\n\t\t\"customerName\":\"Test Updated\",\n\t\t\"items\":[\n\t\t\t{\n\t\t\t\t\"lineItemID\":1,\n\t\t\t\t\"itemCode\":\"112312323\",\n\t\t\t\t\"description\":\"Updatedtest2\",\n\t\t\t\t\"quantity\":1\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"lineItemID\":2,\n\t\t\t\t\"itemCode\":\"121231233\",\n\t\t\t\t\"description\":\"Updatedtest2\",\n\t\t\t\t\"quantity\":1\n\t\t\t}\n\t\t]\n\t}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
