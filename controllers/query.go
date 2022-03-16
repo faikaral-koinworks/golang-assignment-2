@@ -27,7 +27,7 @@ func QueryCreate(orderInput models.Order) models.Order {
 	return newOrder
 }
 
-func testGet() {
+func QueryGetAll() []models.Order {
 	db := database.GetDB()
 
 	var orders []models.Order
@@ -35,13 +35,10 @@ func testGet() {
 	dberr := db.Preload("Items").Find(&orders).Error
 
 	if dberr != nil {
-		fmt.Println("Error fetching user data: ", dberr)
-		return
+		panic(dberr)
 	}
 
-	converted, _ := json.Marshal(orders)
-
-	fmt.Println(string(converted))
+	return orders
 }
 
 func testDelete(id uint) {
