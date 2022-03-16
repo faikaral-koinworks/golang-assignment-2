@@ -9,7 +9,9 @@ import (
 
 func main() {
 	database.StartDB()
-	// testCreate()
+	testCreate()
+	testCreate()
+	testDelete(1)
 	testGet()
 }
 
@@ -69,4 +71,24 @@ func testGet() {
 	converted, _ := json.Marshal(orders)
 
 	fmt.Println(string(converted))
+}
+
+func testDelete(id uint) {
+	db := database.GetDB()
+
+	dberr := db.Where("Order_id=?", id).Delete(&models.Item{}).Error
+
+	if dberr != nil {
+		fmt.Println("Error fetching user data: ", dberr)
+		return
+	}
+
+	dberr = db.Delete(&models.Order{}, id).Error
+
+	if dberr != nil {
+		fmt.Println("Error fetching user data: ", dberr)
+		return
+	}
+
+	fmt.Println("Data Deleted")
 }
